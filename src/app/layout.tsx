@@ -14,12 +14,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-      <html lang="en">
-        <body className="bg-gray-100 text-gray-800">
+      <html lang="ko">
+        <body className="text-gray-800">
             <Header/>
-            <main className="container mx-auto px-4 py-8">{children}</main>
+            <main className="container mx-auto min-h-screen max-w-3xl px-6 pt-10 pb-8">{children}</main>
             <Footer/>
-      </body>
+        </body>
       </html>
   );
 }
