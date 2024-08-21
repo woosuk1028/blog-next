@@ -28,7 +28,7 @@ export default function Posts() {
                                     modi, nulla officia provident quos sequi vero voluptatem?
                                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque doloribus eligendi
                                     illo laboriosam non sint sit totam unde? Aliquid consectetur doloremque ducimus
-                                    modi, nulla officia provident quos sequi vero voluptatem?
+                                    modi, nulla officia provident quos sequi vero voluptatem? 111
                                 </p>
 
                                 <div className="flex mt-2 md:mt-4 text-gray-500">2024.08.21 17:55:00</div>
