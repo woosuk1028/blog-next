@@ -43,7 +43,7 @@ export default function Create() {
                                     {editorLoaded ? (
                                         <CKEditor
                                             editor={ClassicEditor}
-                                            data='<p>Hello from CKEditor 5!</p>'
+                                            data='<p></p>'
                                             config={{
                                                 extraPlugins: [MyCustomUploadAdapterPlugin],
                                                 toolbar: [
