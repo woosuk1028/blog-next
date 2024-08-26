@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 export default function Create() {
-    const editorRef = useRef();
+    const editorRef = useRef<{ CKEditor: any, ClassicEditor: any } | null>(null);
     const [editorLoaded, setEditorLoaded] = useState(false);
     const { CKEditor, ClassicEditor } = editorRef.current || {};
 
@@ -56,10 +56,10 @@ export default function Create() {
                                                     ]
                                                 }
                                             }}
-                                            onInit={editor => {
+                                            onInit={(editor: any) => {
                                                 console.log('Editor is ready to use!', editor);
                                             }}
-                                            onChange={(event, editor) => {
+                                            onChange={(event: any, editor: any) => {
                                                 const data = editor.getData();
                                                 console.log({ event, editor, data });
                                             }}
@@ -86,21 +86,23 @@ export default function Create() {
 }
 
 // 커스텀 이미지 업로드 어댑터 플러그인
-function MyCustomUploadAdapterPlugin(editor) {
-    editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+function MyCustomUploadAdapterPlugin(editor: any) {
+    editor.plugins.get('FileRepository').createUploadAdapter = (loader: any) => {
         return new MyUploadAdapter(loader);
     };
 }
 
 // 업로드 어댑터 구현
 class MyUploadAdapter {
-    constructor(loader) {
+    private loader: any;
+
+    constructor(loader: any) {
         this.loader = loader;
     }
 
     upload() {
         return this.loader.file
-            .then(file => new Promise((resolve, reject) => {
+            .then((file: any) => new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.onload = () => {
                     resolve({ default: reader.result });
@@ -111,6 +113,6 @@ class MyUploadAdapter {
     }
 
     abort() {
-        // 업로드가 중단될 때의 로직을 추가할 수 있습니다.
+        // 업로드가 중단될 때의 로직을
     }
 }
