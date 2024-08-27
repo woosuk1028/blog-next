@@ -10,6 +10,7 @@ const CREATE_POST = gql`
 `;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    console.log('Request received:', req.method, req.url);
     if (req.method === 'POST') {
         const { title, category, content, tag } = req.body;
 

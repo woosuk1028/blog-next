@@ -5,6 +5,11 @@ import React, { useState, useEffect, useRef } from 'react';
 export default function Create() {
     const editorRef = useRef<{ CKEditor: any, ClassicEditor: any } | null>(null);
     const [editorLoaded, setEditorLoaded] = useState(false);
+    const [title, setTitle] = useState('');
+    const [contents, setContents] = useState('');
+    const [category, setCategory] = useState('');
+    const [tag, setTag] = useState('');
+
     const { CKEditor, ClassicEditor } = editorRef.current || {};
 
     useEffect(() => {
@@ -15,9 +20,39 @@ export default function Create() {
         setEditorLoaded(true);
     }, []);
 
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        const postData = {
+            title,
+            category,
+            contents,
+            tag,
+        };
+
+        try {
+            const response = await fetch('/api/posts/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(postData),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Post created successfully: ', data);
+            } else {
+                console.error('Failed to create post');
+            }
+        } catch (error) {
+            console.error('Error creating post:', error);
+        }
+    };
+
     return (
         <div className="pb-5">
-            <form>
+            <form onSubmit={handleSubmit}>
                 <div className="space-y-12">
                     <div className="border-b border-gray-900/10 pb-12">
                         <h2 className="text-base font-semibold leading-7 text-gray-900">글쓰기</h2>
@@ -30,9 +65,35 @@ export default function Create() {
                                     <div
                                         className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
                                         <input type="text" name="title" id="title" autoComplete="title"
+                                               value={title}
+                                               onChange={(e) => setTitle(e.target.value)}
                                                className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                                                placeholder="title"/>
                                     </div>
+                                </div>
+                            </div>
+
+                            <div className="sm:col-span-4">
+                                <label htmlFor="category"
+                                       className="block text-sm font-medium leading-6 text-gray-900">카테고리</label>
+                                <div className="mt-2">
+                                    <input type="text" name="category" id="category" autoComplete="category"
+                                           value={category}
+                                           onChange={(e) => setCategory(e.target.value)}
+                                           className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                                           placeholder="category"/>
+                                </div>
+                            </div>
+
+                            <div className="sm:col-span-4">
+                                <label htmlFor="tag"
+                                       className="block text-sm font-medium leading-6 text-gray-900">태그</label>
+                                <div className="mt-2">
+                                    <input type="text" name="tag" id="tag" autoComplete="tag"
+                                           value={tag}
+                                           onChange={(e) => setTag(e.target.value)}
+                                           className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                                           placeholder="tag"/>
                                 </div>
                             </div>
 
@@ -61,7 +122,8 @@ export default function Create() {
                                             }}
                                             onChange={(event: any, editor: any) => {
                                                 const data = editor.getData();
-                                                console.log({ event, editor, data });
+                                                setContents(data);
+                                                console.log({event, editor, data});
                                             }}
                                         />
                                     ) : (
