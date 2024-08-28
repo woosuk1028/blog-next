@@ -6,7 +6,7 @@ export default function Header() {
             <div className="max-w-screen-md mx-auto">
                 <div className="container mx-auto flex justify-between items-center py-4 px-6">
                     <h1 className="text-2xl font-bold">
-                        <Link href="/">Seok2Log</Link>
+                        <Link href="/">Blog</Link>
                     </h1>
                     <nav>
                         <ul className="flex space-x-6">

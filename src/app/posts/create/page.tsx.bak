@@ -2,68 +2,25 @@
 
 import { useRouter } from 'next/navigation';
 import React, { useState, useEffect, useRef } from 'react';
-import { useEditor, EditorContent } from '@tiptap/react';
-import ToolBar from '../../../components/ToolBar';
-import StarterKit from '@tiptap/starter-kit';
-import Highlight from '@tiptap/extension-highlight';
-import Image from '@tiptap/extension-image';
-import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
-import CodeBlock from '@tiptap/extension-code-block'
-import ImageResize from "tiptap-extension-resize-image";
-import Link from '@tiptap/extension-link';
-import Underline from '@tiptap/extension-underline';
-import Placeholder from '@tiptap/extension-placeholder';
-import Document from '@tiptap/extension-document'
-import Heading from '@tiptap/extension-heading';
-import Paragraph from '@tiptap/extension-paragraph'
-import Text from '@tiptap/extension-text'
-
-interface TiptapProps {
-    content: string;
-}
 
 export default function Create() {
     const router = useRouter();
+    const editorRef = useRef<{ CKEditor: any, ClassicEditor: any } | null>(null);
+    const [editorLoaded, setEditorLoaded] = useState(false);
     const [title, setTitle] = useState('');
     const [contents, setContents] = useState('');
     const [category, setCategory] = useState('');
     const [tag, setTag] = useState('');
 
-    const editor = useEditor({
-        extensions: [
-            StarterKit,
-            Highlight,
-            Image.configure({
-                inline: true,
-                allowBase64: true,
-            }),
-            CodeBlock,
-            ImageResize,
-            Link,
-            Underline,
-            Placeholder,
-            Document,
-            Paragraph,
-            Text,
-            Heading.configure({
-                levels: [1, 2, 3],
-            }),
-        ],
-        content: `<p>글을 입력해주세요.</p>`,
-        editorProps: {
-            attributes: {
-                class: 'tiptap-editor',
-            },
-        },
-        editable: true,
-        autofocus: true,
-        injectCSS: true,
-        immediatelyRender: false,
-    });
+    const { CKEditor, ClassicEditor } = editorRef.current || {};
 
-    if (!editor) {
-        return null;
-    }
+    useEffect(() => {
+        editorRef.current = {
+            CKEditor: require('@ckeditor/ckeditor5-react').CKEditor,
+            ClassicEditor: require('@ckeditor/ckeditor5-build-classic')
+        };
+        setEditorLoaded(true);
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -148,12 +105,77 @@ export default function Create() {
                                 <label htmlFor="content"
                                        className="block text-sm font-medium leading-6 text-gray-900">내용</label>
                                 <div className="mt-2">
-                                    <ToolBar editor={editor} />
-                                    <EditorContent
-                                        editor={editor}
-                                        className="border border-gray-300 rounded-md p-4 min-h-[150px] focus:outline-none focus:border-blue-500"
-                                    />
+                                    {editorLoaded ? (
+                                        <CKEditor
+                                            editor={ClassicEditor}
+                                            data="<p></p>"
+                                            config={{
+                                                extraPlugins: [MyCustomUploadAdapterPlugin],
+                                                toolbar: [
+                                                    'heading', '|', 'bold', 'italic', 'underline', 'strikethrough', '|',
+                                                    'fontSize', 'fontFamily', '|', 'alignment', '|', 'bulletedList', 'numberedList', '|',
+                                                    'outdent', 'indent', '|', 'blockQuote', 'codeBlock', '|',
+                                                    'link', 'imageUpload', '|', 'insertTable', 'mediaEmbed', '|',
+                                                    'undo', 'redo'
+                                                ],
+                                                alignment: {
+                                                    options: ['left', 'center', 'right', 'justify']
+                                                },
+                                                fontSize: {
+                                                    options: [
+                                                        'tiny',
+                                                        'small',
+                                                        'default',
+                                                        'big',
+                                                        'huge'
+                                                    ],
+                                                    supportAllValues: false
+                                                },
+                                                fontFamily: {
+                                                    options: [
+                                                        'default',
+                                                        'Arial, Helvetica, sans-serif',
+                                                        'Courier New, Courier, monospace',
+                                                        'Georgia, serif',
+                                                        'Lucida Sans Unicode, Lucida Grande, sans-serif',
+                                                        'Tahoma, Geneva, sans-serif',
+                                                        'Times New Roman, Times, serif',
+                                                        'Trebuchet MS, Helvetica, sans-serif',
+                                                        'Verdana, Geneva, sans-serif'
+                                                    ]
+                                                },
+                                                codeBlock: {
+                                                    languages: [
+                                                        { language: 'plaintext', label: 'Plain text' },
+                                                        { language: 'javascript', label: 'JavaScript' },
+                                                        { language: 'css', label: 'CSS' },
+                                                        { language: 'html', label: 'HTML' },
+                                                        { language: 'python', label: 'Python' }
+                                                    ]
+                                                }
+                                            }}
+                                            disableWatchdog={true}
+                                            onInit={(editor: any) => {
+                                                console.log('Editor is ready to use!', editor);
+                                            }}
+                                            onChange={(event: any, editor: any) => {
+                                                const data = editor.getData();
+                                                setContents(data);
+                                                console.log({event, editor, data});
+                                            }}
+                                        />
+                                    ) : (
+                                        <div>Editor loading</div>
+                                    )}
                                 </div>
+                                <style jsx global>{`
+                                    .ck-editor__editable_inline {
+                                        min-height: 500px; /* 최소 높이 설정 */
+                                        height: 500px; /* 고정 높이 설정 */
+                                        max-height: 500px; /* 최대 높이 설정 */
+                                        overflow-y: auto; /* 내용이 넘칠 경우 스크롤 */
+                                    }
+                                `}</style>
                             </div>
                         </div>
                     </div>
