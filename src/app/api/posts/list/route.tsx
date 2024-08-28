@@ -18,7 +18,7 @@ const LIST = gql`
 export const runtime = 'edge';
 
 export async function POST(req: NextRequest) {
-    
+
     try {
         const { data } = await client.query({
             query: LIST,

@@ -1,6 +1,53 @@
+"use client";
+
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 
+interface Post {
+    seq: number;
+    title: string;
+    category: string;
+    contents: string;
+    tag: string;
+    views: number;
+    create_date: string;
+}
+
 export default function Posts() {
+    const [posts, setPosts] = useState<Post[]>([]);;
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch('/api/posts/list', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+                const data = await response.json();
+                setPosts(data.list);
+            } catch (error: any) {
+                setError(error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    // 로딩 상태 표시
+    if (loading) return <div>Loading...</div>;
+
+    // 에러 상태 표시
+    if (error) return <div>Error: {error}</div>;
+
     return (
         <div className="pb-5">
             <div className="py-5">
@@ -9,117 +56,27 @@ export default function Posts() {
             </div>
 
             <ul className="divide-y divide-gray-200 -m-4 md:-m-0">
-                <li className="py-3 p-4">
-                    <Link href="/" className="group">
-                        <div className="mb-1 md:mb-2">
-                            <span className="px-1.5 text-sm">book</span>
-                        </div>
-
-                        <div>
-                            <h1 className="text-lg md:text-2xl col-span-12 md:col-span-9 mb-2 group-hover:text-blue-600">제목</h1>
-                            <div
-                                className="col-span-9 md:row-start-2 text-sm md:text-base flex flex-col justify-start md:py-2">
-                                <p className="overflow-ellipsis break-words overflow-hidden h-10 md:h-12 text-gray-400">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque doloribus eligendi
-                                    illo laboriosam non sint sit totam unde? Aliquid consectetur doloremque ducimus
-                                    modi, nulla officia provident quos sequi vero voluptatem?
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque doloribus eligendi
-                                    illo laboriosam non sint sit totam unde? Aliquid consectetur doloremque ducimus
-                                    modi, nulla officia provident quos sequi vero voluptatem?
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque doloribus eligendi
-                                    illo laboriosam non sint sit totam unde? Aliquid consectetur doloremque ducimus
-                                    modi, nulla officia provident quos sequi vero voluptatem?
-                                </p>
-
-                                <div className="flex mt-2 md:mt-4 text-gray-500">2024.08.21 17:55:00</div>
+                {posts.map((post) => (
+                    <li key={post.seq} className="py-3 p-4">
+                        <Link href="/" className="group">
+                            <div className="mb-1 md:mb-2">
+                                <span className="px-1.5 text-sm">{post.category}</span>
                             </div>
-                        </div>
-                    </Link>
-                </li>
 
-                <li className="py-3 p-4">
-                    <Link href="/" className="group">
-                        <div className="mb-1 md:mb-2">
-                            <span className="px-1.5 text-sm">book</span>
-                        </div>
+                            <div>
+                                <h1 className="text-lg md:text-2xl col-span-12 md:col-span-9 mb-2 group-hover:text-blue-600">{post.title}</h1>
+                                <div
+                                    className="col-span-9 md:row-start-2 text-sm md:text-base flex flex-col justify-start md:py-2">
+                                    <p className="overflow-ellipsis break-words overflow-hidden h-10 md:h-12 text-gray-400">
+                                        {post.contents}
+                                    </p>
 
-                        <div>
-                            <h1 className="text-lg md:text-2xl col-span-12 md:col-span-9 mb-2 group-hover:text-blue-600">제목</h1>
-                            <div
-                                className="col-span-9 md:row-start-2 text-sm md:text-base flex flex-col justify-start md:py-2">
-                                <p className="overflow-ellipsis break-words overflow-hidden h-10 md:h-12 text-gray-400">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque doloribus eligendi
-                                    illo laboriosam non sint sit totam unde? Aliquid consectetur doloremque ducimus
-                                    modi, nulla officia provident quos sequi vero voluptatem?
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque doloribus eligendi
-                                    illo laboriosam non sint sit totam unde? Aliquid consectetur doloremque ducimus
-                                    modi, nulla officia provident quos sequi vero voluptatem?
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque doloribus eligendi
-                                    illo laboriosam non sint sit totam unde? Aliquid consectetur doloremque ducimus
-                                    modi, nulla officia provident quos sequi vero voluptatem?
-                                </p>
-
-                                <div className="flex mt-2 md:mt-4 text-gray-500">2024.08.21 17:55:00</div>
+                                    <div className="flex mt-2 md:mt-4 text-gray-500">{post.create_date}</div>
+                                </div>
                             </div>
-                        </div>
-                    </Link>
-                </li>
-
-                <li className="py-3 p-4">
-                    <Link href="/" className="group">
-                        <div className="mb-1 md:mb-2">
-                            <span className="px-1.5 text-sm">book</span>
-                        </div>
-
-                        <div>
-                            <h1 className="text-lg md:text-2xl col-span-12 md:col-span-9 mb-2 group-hover:text-blue-600">제목</h1>
-                            <div
-                                className="col-span-9 md:row-start-2 text-sm md:text-base flex flex-col justify-start md:py-2">
-                                <p className="overflow-ellipsis break-words overflow-hidden h-10 md:h-12 text-gray-400">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque doloribus eligendi
-                                    illo laboriosam non sint sit totam unde? Aliquid consectetur doloremque ducimus
-                                    modi, nulla officia provident quos sequi vero voluptatem?
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque doloribus eligendi
-                                    illo laboriosam non sint sit totam unde? Aliquid consectetur doloremque ducimus
-                                    modi, nulla officia provident quos sequi vero voluptatem?
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque doloribus eligendi
-                                    illo laboriosam non sint sit totam unde? Aliquid consectetur doloremque ducimus
-                                    modi, nulla officia provident quos sequi vero voluptatem?
-                                </p>
-
-                                <div className="flex mt-2 md:mt-4 text-gray-500">2024.08.21 17:55:00</div>
-                            </div>
-                        </div>
-                    </Link>
-                </li>
-
-                <li className="py-3 p-4">
-                    <Link href="/" className="group">
-                        <div className="mb-1 md:mb-2">
-                            <span className="px-1.5 text-sm">book</span>
-                        </div>
-
-                        <div>
-                            <h1 className="text-lg md:text-2xl col-span-12 md:col-span-9 mb-2 group-hover:text-blue-600">제목</h1>
-                            <div
-                                className="col-span-9 md:row-start-2 text-sm md:text-base flex flex-col justify-start md:py-2">
-                                <p className="overflow-ellipsis break-words overflow-hidden h-10 md:h-12 text-gray-400">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque doloribus eligendi
-                                    illo laboriosam non sint sit totam unde? Aliquid consectetur doloremque ducimus
-                                    modi, nulla officia provident quos sequi vero voluptatem?
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque doloribus eligendi
-                                    illo laboriosam non sint sit totam unde? Aliquid consectetur doloremque ducimus
-                                    modi, nulla officia provident quos sequi vero voluptatem?
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque doloribus eligendi
-                                    illo laboriosam non sint sit totam unde? Aliquid consectetur doloremque ducimus
-                                    modi, nulla officia provident quos sequi vero voluptatem?
-                                </p>
-
-                                <div className="flex mt-2 md:mt-4 text-gray-500">2024.08.21 17:55:00</div>
-                            </div>
-                        </div>
-                    </Link>
-                </li>
+                        </Link>
+                    </li>
+                ))}
 
             </ul>
         </div>
