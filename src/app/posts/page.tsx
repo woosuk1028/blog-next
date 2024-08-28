@@ -14,7 +14,7 @@ interface Post {
 }
 
 export default function Posts() {
-    const [posts, setPosts] = useState<Post[]>([]);;
+    const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
