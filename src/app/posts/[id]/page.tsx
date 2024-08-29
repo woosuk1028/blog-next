@@ -4,9 +4,13 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 interface Post {
-    id: string;
+    seq: number;
     title: string;
-    content: string;
+    contents?: string;
+    category: string;
+    tag: string;
+    views: number;
+    create_date: string;
 }
 
 export default function DetailPage({params}: {params: {id: string}}) {
@@ -29,8 +33,9 @@ export default function DetailPage({params}: {params: {id: string}}) {
                     throw new Error('Failed to fetch post details.');
                 }
 
-                const data: Post = await response.json();
-                setPost(data);
+                const data = await response.json();
+                console.log(data);
+                setPost(data.detail);
             } catch (error: any) {
                 setError(error.message);
             } finally {
@@ -41,15 +46,19 @@ export default function DetailPage({params}: {params: {id: string}}) {
         fetchData();
     }, [params.id]);
 
-    // if (loading) return <div>Loading...</div>;
-    // if (error) return <div>Error: {error}</div>;
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error}</div>;
 
     return (
         <div>
-            {post ? (  // post가 존재할 경우 렌더링
-                <div>
+            {post ? (
+                <div className="post-detail">
                     <h1>{post.title}</h1>
-                    <p>{post.content}</p>
+                    {post.contents && (
+                        <div
+                            dangerouslySetInnerHTML={{ __html: post.contents }}
+                        />
+                    )}
                 </div>
             ) : (
                 <div>No Post Found</div>

@@ -8,6 +8,7 @@ const DETAIL = gql`
             seq
             title
             category
+            contents
             tag
             views
             create_date

@@ -58,9 +58,9 @@ export default function Posts() {
             <ul className="divide-y divide-gray-200 -m-4 md:-m-0">
                 {posts.map((post) => (
                     <li key={post.seq} className="py-3 p-4">
-                        <Link href="/" className="group">
+                        <Link href={`/posts/${post.seq}`} className="group">
                             <div className="mb-1 md:mb-2">
-                                <span className="px-1.5 text-sm">{post.category}</span>
+                                <span className="text-sm">{post.category}</span>
                             </div>
 
                             <div>
@@ -68,10 +68,14 @@ export default function Posts() {
                                 <div
                                     className="col-span-9 md:row-start-2 text-sm md:text-base flex flex-col justify-start md:py-2">
                                     <p className="overflow-ellipsis break-words overflow-hidden h-10 md:h-12 text-gray-400">
-                                        {post.contents}
+                                        {post.contents && (
+                                            <div
+                                                dangerouslySetInnerHTML={{ __html: post.contents }}
+                                            />
+                                        )}
                                     </p>
 
-                                    <div className="flex mt-2 md:mt-4 text-gray-500">{post.create_date}</div>
+                                    <div className="flex mt-2 md:mt-4 text-gray-500">{new Date(post.create_date).toLocaleString()}</div>
                                 </div>
                             </div>
                         </Link>

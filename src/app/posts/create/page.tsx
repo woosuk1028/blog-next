@@ -59,6 +59,10 @@ export default function Create() {
         autofocus: true,
         injectCSS: true,
         immediatelyRender: false,
+        onUpdate: ({ editor }) => {
+            const data = editor.getHTML();
+            setContents(data);
+        },
     });
 
     if (!editor) {
