@@ -20,11 +20,6 @@ export default function Header() {
                                     Posts
                                 </Link>
                             </li>
-                            {/*<li>*/}
-                            {/*    <Link href="/login" className="hover:text-gray-400">*/}
-                            {/*        Login*/}
-                            {/*    </Link>*/}
-                            {/*</li>*/}
                         </ul>
                     </nav>
                 </div>

@@ -60,7 +60,7 @@ export default function Posts() {
                     <li key={post.seq} className="py-3 p-4">
                         <Link href={`/posts/${post.seq}`} className="group">
                             <div className="mb-1 md:mb-2">
-                                <span className="text-sm">{post.category}</span>
+                                <span className="text-sm bg-green-200">{post.category}</span>
                             </div>
 
                             <div>

@@ -90,7 +90,7 @@ export default function ToolBar({ editor }: ToolBarProps) {
                 onClick={() => editor.chain().focus().toggleHeading({level: 1}).run()}
                 disabled={!editor.can().chain().focus().toggleHeading({level: 1}).run()}
                 className={`p-2 rounded-md ${
-                    editor.isActive('heading', { level: 1 }) ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'
+                    editor.isActive('heading', {level: 1}) ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'
                 }`}
             >
                 H1
@@ -101,7 +101,7 @@ export default function ToolBar({ editor }: ToolBarProps) {
                 onClick={() => editor.chain().focus().toggleHeading({level: 2}).run()}
                 disabled={!editor.can().chain().focus().toggleHeading({level: 2}).run()}
                 className={`p-2 rounded-md ${
-                    editor.isActive('heading', { level: 2 }) ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'
+                    editor.isActive('heading', {level: 2}) ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'
                 }`}
             >
                 H2
@@ -112,10 +112,21 @@ export default function ToolBar({ editor }: ToolBarProps) {
                 onClick={() => editor.chain().focus().toggleHeading({level: 3}).run()}
                 disabled={!editor.can().chain().focus().toggleHeading({level: 3}).run()}
                 className={`p-2 rounded-md ${
-                    editor.isActive('heading', { level: 3 }) ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'
+                    editor.isActive('heading', {level: 3}) ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'
                 }`}
             >
                 H3
+            </button>
+
+            <button
+                type={"button"}
+                onClick={() => editor.chain().focus().toggleBulletList().run()}
+                disabled={!editor.can().chain().focus().toggleBulletList().run()}
+                className={`p-2 rounded-md ${
+                    editor.isActive('bulletList') ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'
+                }`}
+            >
+                List
             </button>
         </div>
     );

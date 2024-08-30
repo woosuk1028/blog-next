@@ -17,6 +17,8 @@ import Document from '@tiptap/extension-document'
 import Heading from '@tiptap/extension-heading';
 import Paragraph from '@tiptap/extension-paragraph'
 import Text from '@tiptap/extension-text'
+import BulletList from '@tiptap/extension-bullet-list'
+import ListItem from '@tiptap/extension-list-item'
 
 interface TiptapProps {
     content: string;
@@ -41,15 +43,21 @@ export default function Create() {
             ImageResize,
             Link,
             Underline,
-            Placeholder,
             Document,
             Paragraph,
             Text,
             Heading.configure({
                 levels: [1, 2, 3],
             }),
+            BulletList.configure({
+                keepMarks: true,
+            }),
+            ListItem,
+            Placeholder.configure({
+                placeholder: '글을 입력해주세요...',
+            }),
         ],
-        content: `<p>글을 입력해주세요.</p>`,
+        content: ``,
         editorProps: {
             attributes: {
                 class: 'tiptap-editor',
@@ -137,6 +145,18 @@ export default function Create() {
                             </div>
 
                             <div className="sm:col-span-4">
+                                <label htmlFor="content"
+                                       className="block text-sm font-medium leading-6 text-gray-900">내용</label>
+                                <div className="mt-2">
+                                    <ToolBar editor={editor}/>
+                                    <EditorContent
+                                        editor={editor}
+                                        className="border border-gray-300 rounded-md p-4 min-h-[150px] focus:outline-none focus:border-blue-500"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="sm:col-span-4">
                                 <label htmlFor="tag"
                                        className="block text-sm font-medium leading-6 text-gray-900">태그</label>
                                 <div className="mt-2">
@@ -145,18 +165,6 @@ export default function Create() {
                                            onChange={(e) => setTag(e.target.value)}
                                            className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                                            placeholder="tag"/>
-                                </div>
-                            </div>
-
-                            <div className="sm:col-span-4">
-                                <label htmlFor="content"
-                                       className="block text-sm font-medium leading-6 text-gray-900">내용</label>
-                                <div className="mt-2">
-                                    <ToolBar editor={editor} />
-                                    <EditorContent
-                                        editor={editor}
-                                        className="border border-gray-300 rounded-md p-4 min-h-[150px] focus:outline-none focus:border-blue-500"
-                                    />
                                 </div>
                             </div>
                         </div>
