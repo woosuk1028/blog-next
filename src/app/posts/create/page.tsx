@@ -1,24 +1,23 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import ToolBar from '../../../components/ToolBar';
 import StarterKit from '@tiptap/starter-kit';
 import Highlight from '@tiptap/extension-highlight';
 import Image from '@tiptap/extension-image';
-import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
-import CodeBlock from '@tiptap/extension-code-block'
+import CodeBlock from '@tiptap/extension-code-block';
 import ImageResize from "tiptap-extension-resize-image";
 import Link from '@tiptap/extension-link';
 import Underline from '@tiptap/extension-underline';
 import Placeholder from '@tiptap/extension-placeholder';
-import Document from '@tiptap/extension-document'
+import Document from '@tiptap/extension-document';
 import Heading from '@tiptap/extension-heading';
-import Paragraph from '@tiptap/extension-paragraph'
-import Text from '@tiptap/extension-text'
-import BulletList from '@tiptap/extension-bullet-list'
-import ListItem from '@tiptap/extension-list-item'
+import Paragraph from '@tiptap/extension-paragraph';
+import Text from '@tiptap/extension-text';
+import BulletList from '@tiptap/extension-bullet-list';
+import ListItem from '@tiptap/extension-list-item';
 
 interface TiptapProps {
     content: string;
@@ -37,7 +36,6 @@ export default function Create() {
             Highlight,
             Image.configure({
                 inline: true,
-                allowBase64: true,
             }),
             CodeBlock,
             ImageResize,
@@ -73,6 +71,28 @@ export default function Create() {
         },
     });
 
+    // 커스텀 이미지 업로드 명령어
+    const addImage = async (file: File) => {
+        const formData = new FormData();
+        formData.append('image', file);
+
+        try {
+            const response = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to upload image');
+            }
+
+            const data = await response.json();
+            editor?.commands.setImage({ src: data.url }); // 이미지 URL로 에디터에 이미지 삽입
+        } catch (error) {
+            console.error('Error uploading image:', error);
+        }
+    };
+
     if (!editor) {
         return null;
     }
@@ -98,8 +118,7 @@ export default function Create() {
 
             if (response.ok) {
                 const data = await response.json();
-                if(data != 0)
-                    router.push('/posts');
+                if (data != 0) router.push('/posts');
                 console.log('Post created successfully: ', data);
             } else {
                 console.error('Failed to create post');
@@ -148,7 +167,7 @@ export default function Create() {
                                 <label htmlFor="content"
                                        className="block text-sm font-medium leading-6 text-gray-900">내용</label>
                                 <div className="mt-2">
-                                    <ToolBar editor={editor}/>
+                                    <ToolBar editor={editor} addImage={addImage} />
                                     <EditorContent
                                         editor={editor}
                                         className="border border-gray-300 rounded-md p-4 min-h-[150px] focus:outline-none focus:border-blue-500"
@@ -180,36 +199,4 @@ export default function Create() {
             </form>
         </div>
     );
-}
-
-// 커스텀 이미지 업로드 어댑터 플러그인
-function MyCustomUploadAdapterPlugin(editor: any) {
-    editor.plugins.get('FileRepository').createUploadAdapter = (loader: any) => {
-        return new MyUploadAdapter(loader);
-    };
-}
-
-// 업로드 어댑터 구현
-class MyUploadAdapter {
-    private loader: any;
-
-    constructor(loader: any) {
-        this.loader = loader;
-    }
-
-    upload() {
-        return this.loader.file
-            .then((file: any) => new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => {
-                    resolve({ default: reader.result });
-                };
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-            }));
-    }
-
-    abort() {
-        // 업로드가 중단될 때의 로직을
-    }
 }
