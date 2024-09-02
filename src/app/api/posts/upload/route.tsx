@@ -1,93 +1,66 @@
-import { NextRequest, NextResponse } from 'next/server';
-import formidable, { Files, File } from 'formidable';
-import { createReadStream } from 'fs';
+import { NextResponse } from 'next/server';
+import formidable from 'formidable';
+import fs from 'fs';
 import path from 'path';
-import FormData from 'form-data';
-import fetch from 'node-fetch';
+import { Readable } from 'stream';
 
-export const runtime = 'nodejs'; // Node.js Runtime 사용 설정
-
-export async function POST(req: NextRequest) {
-    try {
-        // Formidable을 사용하여 파일 업로드 처리
-        const form = new formidable.IncomingForm({
-            uploadDir: path.join(process.cwd(), '/uploads'), // 파일 저장 경로 설정
-            keepExtensions: true, // 파일 확장자 유지
-        });
-
-        // req 객체를 IncomingMessage로 변환하여 사용
-        const files = await new Promise<Record<string, formidable.File>>((resolve, reject) => {
-            form.parse(req as any, (err, fields, files: Files) => { // 'req as any'를 사용하여 형변환
-                if (err) {
-                    reject(err);
-                } else {
-                    // files 객체를 올바른 타입으로 변환
-                    const fileEntries: Record<string, formidable.File> = {};
-                    for (const [key, fileOrFiles] of Object.entries(files)) {
-                        if (Array.isArray(fileOrFiles)) {
-                            // 파일 배열인 경우, 첫 번째 파일을 가져옴
-                            fileEntries[key] = fileOrFiles[0];
-                        } else if (fileOrFiles) {
-                            // 파일이 단일 객체인 경우
-                            fileEntries[key] = fileOrFiles;
-                        }
-                    }
-                    resolve(fileEntries);
-                }
-            });
-        });
-
-        const file = files.file; // 업로드된 파일 객체
-
-        if (!file) {
-            return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
-        }
-
-        // originalFilename이 null일 수 있으므로 기본값으로 처리
-        const originalFilename = file.originalFilename ?? 'unknown_filename';
-
-        // 파일을 GraphQL 서버로 업로드하는 함수 호출
-        const uploadedFileData = await uploadFileToGraphQLServer(file.filepath, originalFilename);
-
-        return NextResponse.json(uploadedFileData);
-    } catch (error) {
-        console.error('File upload error:', error);
-        return NextResponse.json({ error: 'Failed to upload file' }, { status: 500 });
-    }
+// 파일 업로드 경로 및 설정
+const uploadDir = path.join(process.cwd(), '/uploads'); // 'uploads' 폴더를 사용
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true }); // 폴더가 없으면 생성
 }
 
-// 파일을 GraphQL 서버로 업로드하는 함수
-const uploadFileToGraphQLServer = async (filePath: string, fileName: string): Promise<any> => {
-    const form = new FormData();
-    form.append(
-        'operations',
-        JSON.stringify({
-            query: `
-        mutation ($file: Upload!) {
-          uploadFile(file: $file) {
-            filename
-            mimetype
-            encoding
-            url
-          }
-        }
-      `,
-            variables: { file: null },
-        })
-    );
-    form.append('map', JSON.stringify({ '0': ['variables.file'] }));
-    form.append('0', createReadStream(filePath), fileName);
+// Next.js의 파일 구성 업데이트
+export const runtime = 'nodejs'; // Node.js 런타임 설정
 
-    // GraphQL 서버로 파일 업로드 요청
-    const response = await fetch('https://seok2.duckdns.org/graphql', {
-        method: 'POST',
-        body: form as any,
+// Custom type to add headers property to Readable
+interface ReadableWithHeaders extends Readable {
+    headers: {
+        [key: string]: string;
+    };
+}
+
+// 파일 업로드 API 핸들러
+export async function POST(req: Request): Promise<Response> {
+    // Request의 Body를 Buffer로 읽어들이고, content-length를 계산하여 헤더에 추가
+    const body = await req.arrayBuffer();
+    const contentLength = body.byteLength;
+
+    // 새로운 Readable 스트림 생성 및 헤더 추가
+    const reqReadable = new Readable() as ReadableWithHeaders;
+    reqReadable.push(Buffer.from(body));
+    reqReadable.push(null);
+
+    // 헤더 설정
+    reqReadable.headers = {
+        'content-length': contentLength.toString(), // content-length 헤더 추가
+        'content-type': req.headers.get('content-type') || '', // content-type 헤더 추가
+    };
+
+    const form = formidable({
+        uploadDir, // 파일 저장 경로
+        keepExtensions: true, // 파일 확장자 유지
     });
 
-    if (!response.ok) {
-        throw new Error('Failed to upload file to GraphQL server');
-    }
+    return new Promise((resolve, reject) => {
+        form.parse(reqReadable as any, (err, fields, files) => {
+            if (err) {
+                console.error('Error parsing the files', err);
+                reject(NextResponse.json({ error: 'Error uploading the file' }, { status: 500 }));
+                return;
+            }
 
-    const result = await response.json();
-    return result.data.uploadFile; // 업로드된 파일의 URL 반환
-};
+            const uploadedFiles = Object.values(files).flatMap((file) => {
+                if (!file) return [];
+                const singleFile = Array.isArray(file) ? file[0] : file;
+                return {
+                    url: `/api/files/${singleFile.newFilename}`, // API 경로로 파일을 제공
+                    originalFilename: singleFile.originalFilename,
+                };
+            });
+
+            // 명확한 Response 반환
+            resolve(NextResponse.json({ files: uploadedFiles }));
+        });
+    });
+}

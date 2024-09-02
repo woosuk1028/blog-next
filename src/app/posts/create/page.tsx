@@ -77,7 +77,7 @@ export default function Create() {
         formData.append('image', file);
 
         try {
-            const response = await fetch('/api/upload', {
+            const response = await fetch('/api/posts/upload', {
                 method: 'POST',
                 body: formData,
             });
@@ -87,7 +87,8 @@ export default function Create() {
             }
 
             const data = await response.json();
-            editor?.commands.setImage({ src: data.url }); // 이미지 URL로 에디터에 이미지 삽입
+            const uploadedFileUrl = data.files[0].url;
+            editor?.commands.setImage({ src: uploadedFileUrl });
         } catch (error) {
             console.error('Error uploading image:', error);
         }
