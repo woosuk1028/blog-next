@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import sanitizeHtml from 'sanitize-html';
 
 interface Post {
     seq: number;
@@ -70,7 +71,14 @@ export default function Posts() {
                                     <p className="overflow-ellipsis break-words overflow-hidden h-10 md:h-12 text-gray-400">
                                         {post.contents && (
                                             <div
-                                                dangerouslySetInnerHTML={{ __html: post.contents }}
+                                                dangerouslySetInnerHTML={{
+                                                    __html: sanitizeHtml(post.contents, {
+                                                        allowedTags: [ 'b', 'i', 'em', 'strong', 'a', 'p' ], // 허용할 태그만 나열
+                                                        allowedAttributes: {
+                                                            'a': [ 'href' ], // 특정 태그에 대한 허용된 속성
+                                                        },
+                                                    })
+                                                }}
                                             />
                                         )}
                                     </p>
