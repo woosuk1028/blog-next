@@ -17,7 +17,7 @@ export default function RootLayout({
       <html lang="ko">
         <body className="text-gray-800">
             <Header/>
-            <main className="container mx-auto min-h-screen max-w-3xl px-6 pt-10 pb-8">{children}</main>
+            <main className="container mx-auto min-h-screen max-w-3xl">{children}</main>
             <Footer/>
         </body>
       </html>

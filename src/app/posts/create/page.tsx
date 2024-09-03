@@ -67,7 +67,8 @@ export default function Create() {
         immediatelyRender: false,
         onUpdate: ({ editor }) => {
             const data = editor.getHTML();
-            setContents(data);
+            const processedData = data.replace(/<p><\/p>/g, '<p><br></p>');
+            setContents(processedData);
         },
     });
 
@@ -133,8 +134,8 @@ export default function Create() {
         <div className="pb-5">
             <form onSubmit={handleSubmit}>
                 <div className="space-y-12">
-                    <div className="border-b border-gray-900/10 pb-12">
-                        <h2 className="text-base font-semibold leading-7 text-gray-900">글쓰기</h2>
+                    <div className="border-b border-gray-900/10 pb-12 mt-10">
+                        <h2 className="text-base font-semibold leading-7 text-gray-900">Write</h2>
 
                         <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 ">
                             <div className="sm:col-span-4">

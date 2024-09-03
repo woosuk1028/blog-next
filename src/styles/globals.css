@@ -21,6 +21,11 @@ a:hover {
     box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
+.main-img {
+    width: 500px;
+    height: 700px;
+}
+
 .tiptap.ProseMirror.tiptap-editor pre,
 .tiptap.ProseMirror.tiptap-editor code,
 .tiptap.ProseMirror.tiptap-editor kbd,
@@ -107,18 +112,23 @@ a:hover {
 
 /*list style*/
 .tiptap.ProseMirror.tiptap-editor ul,
-.tiptap.ProseMirror.tiptap-editor ol {
-    padding-left: 1.25rem; /* Tailwind의 pl-5에 해당 */
+.post-detail ul,
+.tiptap.ProseMirror.tiptap-editor ol,
+.post-detail ol {
+    padding-left: 1.25rem;
 }
 
-.tiptap.ProseMirror.tiptap-editor ul {
-    list-style-type: disc; /* 불릿 스타일 */
+.tiptap.ProseMirror.tiptap-editor ul,
+.post-detail ul {
+    list-style-type: disc;
 }
 
-.tiptap.ProseMirror.tiptap-editor ol {
-    list-style-type: decimal; /* 숫자 스타일 */
+.tiptap.ProseMirror.tiptap-editor ol,
+.post-detail ol {
+    list-style-type: decimal;
 }
 
-.tiptap.ProseMirror.tiptap-editor li {
-    margin: 0.5rem 0; /* Tailwind의 my-2에 해당 */
+.tiptap.ProseMirror.tiptap-editor li,
+.post-detail li {
+    margin: 0.5rem 0;
 }
