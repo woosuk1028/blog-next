@@ -23,6 +23,7 @@ export async function POST(req: NextRequest) {
     try {
         const { data } = await client.query({
             query: LIST,
+            fetchPolicy: 'no-cache',
         });
 
         return NextResponse.json(data);

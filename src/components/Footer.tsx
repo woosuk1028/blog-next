@@ -1,6 +1,6 @@
 export default function Footer() {
     return (
-        <footer className="bg-gray-800 text-white mt-8 py-4">
+        <footer className="text-black bg-white mt-8 py-4">
             <div className="max-w-screen-md mx-auto px-4">
                 <div className="container mx-auto text-center">
                     <p>&copy; {new Date().getFullYear()} My Blog. All rights reserved.</p>

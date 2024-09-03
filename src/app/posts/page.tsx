@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import sanitizeHtml from 'sanitize-html';
 
@@ -18,30 +18,43 @@ export default function Posts() {
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+    const fetchData = async () => {
+        try {
+            const response = await fetch('/api/posts/list', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            if (!response.ok) {
+                throw new Error('Failed to fetch data');
+            }
+            const data = await response.json();
+            setPosts(data.list);
+        } catch (error: any) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch('/api/posts/list', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
-                if (!response.ok) {
-                    throw new Error('Failed to fetch data');
-                }
-                const data = await response.json();
-                setPosts(data.list);
-            } catch (error: any) {
-                setError(error.message);
-            } finally {
-                setLoading(false);
+        fetchData();  // 처음 렌더링 시 데이터를 한 번 가져옴
+
+        intervalRef.current = setInterval(() => {
+            fetchData();  // 주기적으로 데이터 갱신
+        }, 5000);  // 5000ms (5초)마다 데이터를 새로고침
+
+        // 컴포넌트 언마운트 시 인터벌 제거
+        return () => {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
             }
         };
-
-        fetchData();
     }, []);
+
 
     // 로딩 상태 표시
     if (loading) return <div>Loading...</div>;
