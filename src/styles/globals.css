@@ -104,3 +104,21 @@ a:hover {
 {
     font-size: 0.875rem !important;
 }
+
+/*list style*/
+.tiptap.ProseMirror.tiptap-editor ul,
+.tiptap.ProseMirror.tiptap-editor ol {
+    padding-left: 1.25rem; /* Tailwind의 pl-5에 해당 */
+}
+
+.tiptap.ProseMirror.tiptap-editor ul {
+    list-style-type: disc; /* 불릿 스타일 */
+}
+
+.tiptap.ProseMirror.tiptap-editor ol {
+    list-style-type: decimal; /* 숫자 스타일 */
+}
+
+.tiptap.ProseMirror.tiptap-editor li {
+    margin: 0.5rem 0; /* Tailwind의 my-2에 해당 */
+}

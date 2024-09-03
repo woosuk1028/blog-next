@@ -65,6 +65,7 @@
     "tiptap-resize-image": "^2.0.1"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.15",
     "@types/formidable": "^3.4.5",
     "@types/lowlight": "^0.0.7",
     "@types/node": "^20",
