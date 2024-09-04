@@ -21,9 +21,34 @@ a:hover {
     box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
+.editor-btn {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
 .main-img {
     width: 500px;
     height: 700px;
+}
+
+.tiptap.ProseMirror.tiptap-editor a,
+.post-detail a
+{
+    text-decoration: underline;
+    text-decoration-color: brown;
+    text-underline-offset: 2px;
+    transition: all 0.2s ease-in-out;
+    color: brown;
+    cursor:pointer;
+}
+
+.tiptap.ProseMirror.tiptap-editor a:hover,
+.post-detail a:hover
+{
+    text-decoration-color: chocolate;
+    text-underline-offset: 4px;
+    color: chocolate;
 }
 
 .tiptap.ProseMirror.tiptap-editor pre,
