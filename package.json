@@ -59,6 +59,7 @@
     "react-dom": "^18",
     "react-simplemde-editor": "^5.2.0",
     "sanitize-html": "^2.13.0",
+    "sharp": "^0.33.5",
     "tailwind-merge": "^2.5.2",
     "tiptap-extension-resize-image": "^1.1.8",
     "tiptap-imagresize": "^1.1.0",

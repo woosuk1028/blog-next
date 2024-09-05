@@ -45,7 +45,7 @@ export default function Posts() {
 
         intervalRef.current = setInterval(() => {
             fetchData();  // 주기적으로 데이터 갱신
-        }, 5000);  // 5000ms (5초)마다 데이터를 새로고침
+        }, 10000);
 
         // 컴포넌트 언마운트 시 인터벌 제거
         return () => {

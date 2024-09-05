@@ -5,12 +5,25 @@
 
 /* Custom global styles */
 body {
-    font-family: 'Inter', sans-serif;
+    /*font-family: 'Inter', sans-serif;*/
+    font-family: "Nanum Gothic", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 a {
     text-decoration: none;
     color: inherit;
+
+    font-family: "Nanum Gothic", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+p {
+    font-family: "Nanum Gothic", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 a:hover {
@@ -32,9 +45,21 @@ a:hover {
     height: 700px;
 }
 
+.tiptap.ProseMirror.tiptap-editor p,
+.post-detail p
+{
+    font-family: "Nanum Gothic", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
 .tiptap.ProseMirror.tiptap-editor a,
 .post-detail a
 {
+    font-family: "Nanum Gothic", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+
     text-decoration: underline;
     text-decoration-color: brown;
     text-underline-offset: 2px;
@@ -60,7 +85,7 @@ a:hover {
 .post-detail kbd,
 .post-detail samp
 {
-    font-family: 'JetBrainsMono', monospace !important; /* 커스텀 스타일 적용 */
+    /*font-family: 'JetBrainsMono', monospace !important; !* 커스텀 스타일 적용 *!*/
     font-feature-settings: normal !important;
     font-variation-settings: normal !important;
     font-size: 1em !important;
@@ -93,6 +118,10 @@ a:hover {
 .post-detail h5,
 .post-detail h6
 {
+    font-family: "Nanum Gothic", sans-serif;
+    /*font-weight: 400;*/
+    font-style: normal;
+
     font-size: initial !important;
     font-weight: bold !important;
     margin-top: 1rem !important;
