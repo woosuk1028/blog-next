@@ -54,7 +54,7 @@ export async function POST(req: Request): Promise<Response> {
                 if (!file) return [];
                 const singleFile = Array.isArray(file) ? file[0] : file;
                 return {
-                    url: `/api/files/${singleFile.newFilename}`, // API 경로로 파일을 제공
+                    url: `https://seok2.duckdns.org/api/files/${singleFile.newFilename}`, // API 경로로 파일을 제공
                     originalFilename: singleFile.originalFilename,
                 };
             });
