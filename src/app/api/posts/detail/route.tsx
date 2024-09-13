@@ -10,6 +10,7 @@ const DETAIL = gql`
             category
             contents
             tag
+            description
             views
             create_date
         }

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Head from 'next/head';
 
 interface Post {
     seq: number;
@@ -9,6 +10,7 @@ interface Post {
     contents?: string;
     category: string;
     tag: string;
+    description: string;
     views: number;
     create_date: string;
 }
@@ -44,6 +46,21 @@ export default function DetailPage({params}: {params: {id: string}}) {
 
         fetchData();
     }, [params.id]);
+
+    useEffect(() => {
+        if (post) {
+            document.title = post.title; // 동적으로 페이지 제목 설정
+            const metaDescription = document.querySelector('meta[name="description"]');
+            if (metaDescription) {
+                metaDescription.setAttribute('description', post.description ? post.description.substring(0, 150) : '');
+            } else {
+                const newMeta = document.createElement('meta');
+                newMeta.name = "description";
+                newMeta.content = post.description ? post.description.substring(0, 150) : '';
+                document.head.appendChild(newMeta);
+            }
+        }
+    }, [post]);
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;

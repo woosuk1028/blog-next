@@ -18,7 +18,7 @@ export default function Header() {
                                 </Link>
                             </li>
                             <li>
-                                <Link href="https://github.com/woosuk1028" className="hover:text-gray-400 flex">
+                                <Link href="https://github.com/woosuk1028" target="_blank" className="hover:text-gray-400 flex">
                                     <svg fill="currentColor" viewBox="0 0 16 16" height="25" width="25"
                                          className="fill-foreground transition hover:fill-gray-600">
                                         <path
