@@ -3,8 +3,8 @@ import client from '@/lib/apolloClient';
 import { gql } from '@apollo/client';
 
 const CREATE = gql`
-    mutation create($title: String!, $category: String!, $contents: String!, $tag: String!) {
-        create(title: $title, category: $category, contents: $contents, tag: $tag)
+    mutation create($title: String!, $category: String!, $contents: String!, $tag: String!, $description: String!) {
+        create(title: $title, category: $category, contents: $contents, tag: $tag, description: $description)
     }
 `;
 
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     console.log('Request received:', req.method, req.url);
 
     try {
-        const { title, category, contents, tag } = await req.json();
+        const { title, category, contents, tag, description } = await req.json();
 
         const { data } = await client.mutate({
             mutation: CREATE,
@@ -23,6 +23,7 @@ export async function POST(req: NextRequest) {
                 category,
                 contents,
                 tag,
+                description
             },
         });
 

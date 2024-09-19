@@ -30,6 +30,7 @@ export default function Create() {
     const [contents, setContents] = useState('');
     const [category, setCategory] = useState('');
     const [tag, setTag] = useState('');
+    const [description, setDescription] = useState('');
 
     const editor = useEditor({
         extensions: [
@@ -108,6 +109,7 @@ export default function Create() {
             category,
             contents,
             tag,
+            description
         };
 
         try {
@@ -174,7 +176,7 @@ export default function Create() {
                                     <label htmlFor="content"
                                            className="block text-sm font-medium leading-6 text-gray-900">내용</label>
                                     <div className="mt-2">
-                                        <ToolBar editor={editor} addImage={addImage} />
+                                        <ToolBar editor={editor} addImage={addImage}/>
                                         <EditorContent
                                             editor={editor}
                                             className="border border-gray-300 rounded-md p-4 min-h-[150px] focus:outline-none focus:border-blue-500"
@@ -193,6 +195,19 @@ export default function Create() {
                                                placeholder="tag"/>
                                     </div>
                                 </div>
+
+                                <div className="sm:col-span-4">
+                                    <label htmlFor="description"
+                                           className="block text-sm font-medium leading-6 text-gray-900">description</label>
+                                    <div className="mt-2">
+                                        <input type="text" name="description" id="description" autoComplete="description"
+                                               value={description}
+                                               onChange={(e) => setDescription(e.target.value)}
+                                               className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                                               placeholder="description"/>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
