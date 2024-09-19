@@ -1,8 +1,9 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
+import Head from 'next/head';
 import ToolBar from '../../../components/ToolBar';
 import StarterKit from '@tiptap/starter-kit';
 import Highlight from '@tiptap/extension-highlight';
@@ -131,74 +132,79 @@ export default function Create() {
     };
 
     return (
-        <div className="pb-5">
-            <form onSubmit={handleSubmit}>
-                <div className="space-y-12">
-                    <div className="border-b border-gray-900/10 pb-12 mt-10">
-                        <h2 className="text-base font-semibold leading-7 text-gray-900">Write</h2>
+        <>
+            <Head>
+                <title>Seok2 Create Page</title>
+            </Head>
+            <div className="pb-5">
+                <form onSubmit={handleSubmit}>
+                    <div className="space-y-12">
+                        <div className="border-b border-gray-900/10 pb-12 mt-10">
+                            <h2 className="text-base font-semibold leading-7 text-gray-900">Write</h2>
 
-                        <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 ">
-                            <div className="sm:col-span-4">
-                                <label htmlFor="title"
-                                       className="block text-sm font-medium leading-6 text-gray-900">제목</label>
-                                <div className="mt-2">
-                                    <div
-                                        className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
-                                        <input type="text" name="title" id="title" autoComplete="title"
-                                               value={title}
-                                               onChange={(e) => setTitle(e.target.value)}
-                                               className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                                               placeholder="title"/>
+                            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 ">
+                                <div className="sm:col-span-4">
+                                    <label htmlFor="title"
+                                           className="block text-sm font-medium leading-6 text-gray-900">제목</label>
+                                    <div className="mt-2">
+                                        <div
+                                            className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
+                                            <input type="text" name="title" id="title" autoComplete="title"
+                                                   value={title}
+                                                   onChange={(e) => setTitle(e.target.value)}
+                                                   className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                                                   placeholder="title"/>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div className="sm:col-span-4">
-                                <label htmlFor="category"
-                                       className="block text-sm font-medium leading-6 text-gray-900">카테고리</label>
-                                <div className="mt-2">
-                                    <input type="text" name="category" id="category" autoComplete="category"
-                                           value={category}
-                                           onChange={(e) => setCategory(e.target.value)}
-                                           className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                                           placeholder="category"/>
+                                <div className="sm:col-span-4">
+                                    <label htmlFor="category"
+                                           className="block text-sm font-medium leading-6 text-gray-900">카테고리</label>
+                                    <div className="mt-2">
+                                        <input type="text" name="category" id="category" autoComplete="category"
+                                               value={category}
+                                               onChange={(e) => setCategory(e.target.value)}
+                                               className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                                               placeholder="category"/>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="sm:col-span-4">
-                                <label htmlFor="content"
-                                       className="block text-sm font-medium leading-6 text-gray-900">내용</label>
-                                <div className="mt-2">
-                                    <ToolBar editor={editor} addImage={addImage} />
-                                    <EditorContent
-                                        editor={editor}
-                                        className="border border-gray-300 rounded-md p-4 min-h-[150px] focus:outline-none focus:border-blue-500"
-                                    />
+                                <div className="sm:col-span-4">
+                                    <label htmlFor="content"
+                                           className="block text-sm font-medium leading-6 text-gray-900">내용</label>
+                                    <div className="mt-2">
+                                        <ToolBar editor={editor} addImage={addImage} />
+                                        <EditorContent
+                                            editor={editor}
+                                            className="border border-gray-300 rounded-md p-4 min-h-[150px] focus:outline-none focus:border-blue-500"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="sm:col-span-4">
-                                <label htmlFor="tag"
-                                       className="block text-sm font-medium leading-6 text-gray-900">태그</label>
-                                <div className="mt-2">
-                                    <input type="text" name="tag" id="tag" autoComplete="tag"
-                                           value={tag}
-                                           onChange={(e) => setTag(e.target.value)}
-                                           className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                                           placeholder="tag"/>
+                                <div className="sm:col-span-4">
+                                    <label htmlFor="tag"
+                                           className="block text-sm font-medium leading-6 text-gray-900">태그</label>
+                                    <div className="mt-2">
+                                        <input type="text" name="tag" id="tag" autoComplete="tag"
+                                               value={tag}
+                                               onChange={(e) => setTag(e.target.value)}
+                                               className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                                               placeholder="tag"/>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div className="mt-6 flex items-center justify-end gap-x-6">
-                    <button type="button" className="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
-                    <button type="submit"
-                            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save
-                    </button>
-                </div>
-            </form>
-        </div>
+                    <div className="mt-6 flex items-center justify-end gap-x-6">
+                        <button type="button" className="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
+                        <button type="submit"
+                                className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </>
     );
 }
