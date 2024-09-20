@@ -98,6 +98,7 @@ export default async function DetailPage({params}: {params: {id: string}}) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Cache-Control': 'no-cache',
             },
             body: JSON.stringify({
                 query: POST_DETAIL_QUERY,

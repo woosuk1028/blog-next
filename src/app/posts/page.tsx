@@ -69,8 +69,8 @@ export default function Posts() {
             </Head>
             <div className="pb-5">
                 <div className="py-5">
-                    <h1 className="text-3xl md:text-4xl font-bold mb-4">Posts</h1>
-                    <p className="text-lg font-bold text-gray-500">포스트</p>
+                    <h1 className="text-3xl md:text-4xl font-bold mb-4">Post</h1>
+                    {/*<p className="text-lg font-bold text-gray-500">포스트</p>*/}
                 </div>
 
                 <ul className="divide-y divide-gray-200 -m-4 md:-m-0">
