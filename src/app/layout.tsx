@@ -30,7 +30,7 @@ export default function RootLayout({
       </head>
       <body className="text-gray-800">
           <Header/>
-          <main className="container mx-auto min-h-screen max-w-3xl">{children}</main>
+          <main className="container mx-auto min-h-screen max-w-3xl px-6">{children}</main>
           <Footer/>
       </body>
       </html>
