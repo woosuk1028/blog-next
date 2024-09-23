@@ -3,6 +3,7 @@ import formidable from 'formidable';
 import fs from 'fs';
 import path from 'path';
 import { Readable } from 'stream';
+import { DEFAULT_URL, DEFAULT_API_URL } from '@/lib/constants';
 
 // 파일 업로드 경로 및 설정
 const uploadDir = path.join(process.cwd(), '/uploads'); // 'uploads' 폴더를 사용
@@ -54,7 +55,7 @@ export async function POST(req: Request): Promise<Response> {
                 if (!file) return [];
                 const singleFile = Array.isArray(file) ? file[0] : file;
                 return {
-                    url: `https://seok2.duckdns.org/api/files/${singleFile.newFilename}`, // API 경로로 파일을 제공
+                    url: `${DEFAULT_URL}/api/files/${singleFile.newFilename}`, // API 경로로 파일을 제공
                     originalFilename: singleFile.originalFilename,
                 };
             });

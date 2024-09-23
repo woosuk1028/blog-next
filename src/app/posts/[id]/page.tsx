@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Head from 'next/head';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { DEFAULT_URL, DEFAULT_API_URL } from '@/lib/constants';
 
 interface Post {
     seq: number;
@@ -15,7 +16,7 @@ interface Post {
     create_date: string;
 }
 
-const GRAPHQL_API_URL = 'https://seok2.duckdns.org/graphql';
+const GRAPHQL_API_URL = DEFAULT_API_URL;
 
 // GraphQL 쿼리 정의
 const POST_DETAIL_QUERY = `
@@ -75,7 +76,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
             openGraph: {
                 title: post?.title || 'No Title',
                 description: post?.description || 'No Description',
-                url: `https://seok2.duckdns.org/posts/${post?.seq}`,
+                url: `${DEFAULT_URL}/posts/${post?.seq}`,
                 type: 'article',
             },
         };

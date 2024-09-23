@@ -29,10 +29,10 @@ export default function RootLayout({
           <title>Seok2</title>
       </head>
       <body className="text-gray-800">
-      <Header/>
-      <main className="container mx-auto min-h-screen max-w-3xl">{children}</main>
-      <Footer/>
-          </body>
+          <Header/>
+          <main className="container mx-auto min-h-screen max-w-3xl">{children}</main>
+          <Footer/>
+      </body>
       </html>
   );
 }
