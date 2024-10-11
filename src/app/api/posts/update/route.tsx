@@ -3,33 +3,34 @@ import client from '@/lib/apolloClient';
 import { gql } from '@apollo/client';
 
 const UPDATE = gql`
-    query Update {
-        update {
-            seq
-            title
-            category
-            contents
-            tag
-            description
-            views
-            create_date
-        }
+    mutation update($seq: Int!, $title: String!, $category: String!, $contents: String!, $tag: String!, $description: String!) {
+        update(seq: $seq, title: $title, category: $category, contents: $contents, tag: $tag, description: $description)
     }
 `;
 
 export const runtime = 'edge';
 
 export async function POST(req: NextRequest) {
+    console.log('Request received:', req.method, req.url);
 
     try {
-        const { data } = await client.query({
-            query: UPDATE,
-            fetchPolicy: 'no-cache',
+        const { seq, title, category, contents, tag, description } = await req.json();
+
+        const { data } = await client.mutate({
+            mutation: UPDATE,
+            variables: {
+                seq,
+                title,
+                category,
+                contents,
+                tag,
+                description
+            },
         });
 
-        return NextResponse.json(data);
+        return NextResponse.json(data.update);
     } catch (error) {
-        console.error('GraphQL 요청 오류:', error);
-        return NextResponse.json({ error: 'Failed to fetch list' }, { status: 500 });
+        console.error('GraphQL mutation error:', error);
+        return NextResponse.json({ error: 'Failed to create post' }, { status: 500 });
     }
 }

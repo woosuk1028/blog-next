@@ -49,6 +49,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
             body: JSON.stringify({
                 query: POST_DETAIL_QUERY,
                 variables: { seq: parseInt(params.id) },
+                fetchPolicy: 'no-cache',
             }),
         });
 
@@ -104,6 +105,7 @@ export default async function DetailPage({params}: {params: {id: string}}) {
             body: JSON.stringify({
                 query: POST_DETAIL_QUERY,
                 variables: { seq },
+                fetchPolicy: 'no-cache',
             }),
         });
 

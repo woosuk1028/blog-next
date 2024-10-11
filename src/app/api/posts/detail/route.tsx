@@ -28,7 +28,8 @@ export async function POST(req: NextRequest) {
             query: DETAIL,
             variables: {
                 seq
-            }
+            },
+            fetchPolicy: 'no-cache',
         });
 
         return NextResponse.json(data);
