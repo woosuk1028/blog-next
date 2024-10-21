@@ -107,6 +107,7 @@ export default async function DetailPage({params}: {params: {id: string}}) {
                 variables: { seq },
                 fetchPolicy: 'no-cache',
             }),
+            cache: 'no-store',
         });
 
         // 응답 상태 코드 확인
